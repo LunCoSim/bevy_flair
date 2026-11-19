@@ -389,6 +389,8 @@ impl Plugin for FlairStylePlugin {
                         .chain(),
                     StyleSystems::TickAnimations.before(StyleSystems::ResolvePropertyValues),
                     StyleSystems::EmitAnimationEvents.after(StyleSystems::SetAnimationValues),
+                    StyleSystems::MarkEntitiesForStyleRecalculation
+                        .after(bevy_ui::UiSystems::Propagate),
                 ),
             )
             .add_systems(PreStartup, |mut commands: Commands| {
@@ -452,8 +454,7 @@ impl Plugin for FlairStylePlugin {
                         (
                             systems::recalculate_style_on_render_target_info_change,
                             systems::recalculate_style_on_window_media_features_changes,
-                        )
-                            .after(bevy_ui::UiSystems::Propagate),
+                        ),
                     )
                         .chain()
                         .in_set(StyleSystems::MarkEntitiesForStyleRecalculation),
